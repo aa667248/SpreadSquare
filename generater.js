@@ -16,8 +16,8 @@ function spred(contentname,times){
 }
 
 function game(){
-    if(stopgame==true){clearInterval(id)}else{
     var id = setInterval(function(){
+        if(stopgame==true){clearInterval(id)}else{
         phase++
         document.getElementById('phase_text').innerHTML = 'phase'+phase;
         var contents = []
@@ -35,7 +35,7 @@ function game(){
             for(l=0;l<contents.length;l++){
                 document.getElementById(contents[l]).style.pointerEvents ='all';
             }
-        },500)
+        },300)
         time = 0
         console.log(time)
         var id2 = setInterval(function(){
@@ -50,8 +50,7 @@ function game(){
                     document.getElementById(contents[l]).remove()
                 }
             }
-        },10)
+        },10)}
         if(stopgame==true){clearInterval(id)}
     },5000)
-}
 }
