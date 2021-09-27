@@ -35,7 +35,7 @@ function game(){
             for(l=0;l<contents.length;l++){
                 document.getElementById(contents[l]).style.pointerEvents ='all';
             }
-        },300)
+        },500)
         time = 0
         console.log(time)
         var id2 = setInterval(function(){
