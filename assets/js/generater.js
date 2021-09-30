@@ -38,7 +38,8 @@ function start_game(){
             if(t*inc_px+50>=size_limit){
                 clearInterval(id2)
             }
+            if(stopgame==true){clearInterval(id2)}
         },10)}
-        if(stopgame==true){clearInterval(id)}
+        if(stopgame==true){clearInterval(id)}else{scoref()}
     },phase_speed)
 }
