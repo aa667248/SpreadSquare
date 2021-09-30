@@ -28,6 +28,7 @@ function change_volume(){
 
 function result_s(){
     document.getElementById('result_phase').innerHTML='phase:'+phase
+    document.getElementById('result_score').innerHTML='score: '+Math.floor(score)
     document.getElementById('td1').innerHTML='　'+document.getElementById('size_limit').value+' %'
     document.getElementById('td2').innerHTML='　'+document.getElementById('phase_speed').value+' second'
     document.getElementById('td3').innerHTML='　'+document.getElementById('increase_speed').value+' phase'
