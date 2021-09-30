@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="jp">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>SpreadSquare</title>
+        <link rel="icon" href="assets/img/icon.svg">
+        <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
+        <link rel="stylesheet" href="assets/css/style.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script>
+            i = 0
+            phase = 0
+            size_limit = 700
+            phase_speed = 5000
+            inc_px = (size_limit-50)/5000
+            increase_speed = 5
+            increase_limit = 20
+            stopgame = false
+            function starta(){
+                size_limit = document.body.clientWidth*(document.getElementById('size_limit').value/100)
+                phase_speed = document.getElementById('phase_speed').value*1000
+                inc_px = ((size_limit -50)/phase_speed)*10+0.1
+                increase_speed = document.getElementById('increase_speed').value *1
+                increase_limit = document.getElementById('increase_limit').value *1
+                stopgame=false
+                phase = 0
+                console.log(size_limit,phase_speed,inc_px,increase_speed,increase_limit)
+                document.body.requestFullscreen();
+                document.getElementById('phase_text').innerHTML='phase:'+0
+                document.getElementById('bgm').play()
+                document.getElementById('bgm').volume=document.getElementById('volume').value/100;
+                document.getElementById('menu').style.display='none';
+                document.getElementById('result').style.display='none';
+                document.getElementById('game').style.display='inline';
+                document.getElementById('marker').style.display='inline'
+                document.getElementById('cursor').style.display='inline';
+                document.body.style.cursor='none'
+                start_game()
+            }
+        </script>
+        <script src="assets/js/options.js"></script>
+        <script src="assets/js/cursor.js"></script>
+        <script src="assets/js/judge.js"></script>
+        <script src="assets/js/generater.js"></script>
+    </head>
+    <body>
+
+        <audio src="assets/music/Horizon_Blue.mp3" controls loop id="bgm">Your browser does not support the
+            <code>audio</code> element.</audio>
+        <div id="cursor"></div>
+        <div id="menu">
+            <div class="space"></div>
+            <img src="assets/img/title.svg" id="title">
+            <div class="space"></div>
+            <div id="option">
+                <p id="start" class="options" onclick="starta()">START</p>
+                <div class="space2"></div>
+                <p id="setting" class="options" onclick="open_setting(true)">SETTING</p>
+                <div class="space2"></div>
+                <p id="rule" class="options" onclick="open_rule(true)">RULE</p>
+            </div>
+            <div id="setting_body">
+                <h1 class="setting_contents">SETTING</h1>
+                <p class="setting_contents">volume<br>
+                    <i class="fas fa-volume-up"></i>
+                    <input type="range" value="50" min="0" max="100" step="1"
+                    oninput="change_volume()" id="volume">
+                    <output id="output1">50</output><br><span class="setting_jp">音量の調整</span>
+                </p>
+                <p class="setting_contents">size_limit<br>
+                    <i class="fas fa-expand-arrows-alt"></i>
+                    <input type="range" value="40" min="20" max="80" step="1"
+                    oninput="document.getElementById('output2').value=this.value" id="size_limit">
+                    <output id="output2">40</output>%<br><span class="setting_jp">最大時の大きさの調整（画面横幅に対する割合）</span>
+                </p>
+                <p class="setting_contents">phase_speed<br>
+                    <i class="fas fa-hourglass-half"></i>
+                    <input type="range" name="samplerange" value="5" min="2" max="10" step="1"
+                    oninput="document.getElementById('output3').value=this.value" id="phase_speed">
+                    <output id="output3">5</output><span class="setting_jp">秒</span><br>phase<span class="setting_jp">時間の調整</span>
+                </p>
+                <p class="setting_contents">increase_speed<br>
+                    <i class="fas fa-hourglass-half"></i>
+                    <input type="range" name="samplerange" value="5" min="1" max="10" step="1"
+                    oninput="document.getElementById('output4').value=this.value" id="increase_speed">
+                    <output id="output4">5</output>phase<span class="setting_jp">ごと</span><br><span class="setting_jp">増加頻度の調整</span>
+                </p>
+                <p class="setting_contents">increase_limit<br>
+                    <i class="fas fa-ban"></i>
+                    <input type="range" name="samplerange" value="20" min="10" max="100" step="1"
+                    oninput="document.getElementById('output5').value=this.value" id="increase_limit">
+                    <output id="output5">20</output><span class="setting_jp">個まで</span><br><span class="setting_jp">増加上限の調整</span>
+                </p>
+                <i class="far fa-times-circle" onclick="open_setting(false)"></i>
+            </div>
+            <div id="rule_body">
+                <h1>RULE</h1>
+                <h2>概要</h2>
+                <p>画面上に出現する四角を避け<br>フェーズ(phase)を進める<br>壁に当たってもゲームオーバー</p>
+                <h2>操作方法</h2>
+                <p>マウスまたはトラックパットによるカーソル移動のみ</p>
+                <h2>四角</h2>
+                <p>フェーズ(phase)の進行に伴い、出現数が変化する<br>設定(SETTING)より変更可</p>
+                <i class="far fa-times-circle" onclick="open_rule(false)"></i>
+            </div>
+            <p id="version">Vr.2.3</p>
+        </div>
+        <div id="game">
+            <p id="phase_text"></p>
+            <div id="top" class="square"></div>
+            <div id="down" class="square"></div>
+            <div id="left" class="square"></div>
+            <div id="right" class="square"></div>
+            <div id="marker"></div>
+        </div>
+        <div id="result">
+            <h1>RESULT</h1>
+            <p id="result_phase"></p>
+            <div id="result_setting">
+                <table>
+                    <tr><td>size_limit</td><td id="td1"></td></tr>
+                    <tr><td>phase_speed</td><td id="td2"></td></tr>
+                    <tr><td>increase_speed</td><td id="td3"></td></tr>
+                    <tr><td>increase_limit</td><td id="td4"></td></tr>
+                </table>
+            </div>
+            <div id="option2">
+                <p id="replay" class="options" onclick="starta()">REPLAY</p>
+                <div class="space2"></div>
+                <p id="home" class="options" onclick="home()">HOME</p>
+                <div class="space2"></div>
+                <a id="report" class="options" href="https://docs.google.com/forms/d/e/1FAIpQLSfAfBBbCtkM6_Hb2KKxEXBMHDU8KGT7i6_zvG4cgWCzG12iog/viewform?usp=sf_link" target="_blank">REPORT</a>
+            </div>
+        </div>
+    </body>
+</html>
