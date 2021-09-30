@@ -33,6 +33,7 @@
                 increase_limit = document.getElementById('increase_limit').value *1
                 stopgame=false
                 phase = 0
+                score = 0
                 console.log(size_limit,phase_speed,inc_px,increase_speed,increase_limit)
                 document.body.requestFullscreen();
                 document.getElementById('phase_text').innerHTML='phase:'+0
@@ -114,7 +115,7 @@
                 <p>フェーズ(phase)の進行に伴い、出現数が変化する<br>設定(SETTING)より変更可</p>
                 <i class="far fa-times-circle" onclick="open_rule(false)"></i>
             </div>
-            <a id="version" href="旧SS.html">Vr.3.0</a>
+            <a id="version" href="旧SS.html">Vr.3.1</a>
         </div>
         <div id="game">
             <p id="phase_text"></p>
