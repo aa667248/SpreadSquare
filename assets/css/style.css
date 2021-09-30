@@ -217,8 +217,12 @@ body{
   text-align: center;
   font-size: 40px;
 }
-#result table{
+#result_score{
+  text-align: center;
   font-size: 40px;
+}
+#result table{
+  font-size: 30px;
   margin-left: auto;
   margin-right: auto;
 }
