@@ -39,3 +39,13 @@ function home(){
     document.getElementById('result').style.display='none'
     document.getElementById('menu').style.display='inline'
 }
+
+function scoref(){
+        var score_x1 = x
+        var score_y1 = y
+        var score1 = Math.sqrt(Math.pow(score_x1-score_x2,2)+Math.pow(score_y1-score_y2,2))*phase/100
+        score = score+score1
+        score_x2 = score_x1
+        score_y2 = score_y1
+        console.log(score)
+}
