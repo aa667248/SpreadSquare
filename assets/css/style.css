@@ -69,6 +69,8 @@ body{
 }
 .space2{height: 10px;}
 #version{
+  color: white;
+  text-decoration: none;
   position: fixed;
   font-family: "my-font";
   font-size: 20px;
