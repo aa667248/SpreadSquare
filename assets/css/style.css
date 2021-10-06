@@ -1,228 +1,159 @@
-@font-face {
-  font-family: "my-font";
-  src: url(Geo-Regular.woff2),
-    url(Geo-Regular.woff);
-}
+<!DOCTYPE html>
+<html lang="jp">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>SpreadSquare</title>
+        <link rel="icon" href="assets/img/icon.svg">
+        <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
+        <link rel="stylesheet" href="assets/css/style.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script>
+            i = 0
+            phase = 0
+            size_limit = 700
+            phase_speed = 5000
+            inc_px = (size_limit-50)/5000
+            increase_speed = 5
+            increase_limit = 20
+            invincible_time　= 200
+            stopgame = false
+            x=0
+            y=0
+            score=0
+            score_x1=0
+            score_y1=0
+            score_x2=0
+            score_y2=0
+            function starta(){
+                size_limit = document.body.clientWidth*(document.getElementById('size_limit').value/100)
+                phase_speed = document.getElementById('phase_speed').value*1000
+                inc_px = ((size_limit -50)/phase_speed)*10+0.1
+                increase_speed = document.getElementById('increase_speed').value *1
+                increase_limit = document.getElementById('increase_limit').value *1
+                stopgame=false
+                phase = 0
+                score = 0
+                console.log(size_limit,phase_speed,inc_px,increase_speed,increase_limit)
+                document.body.requestFullscreen();
+                document.getElementById('phase_text').innerHTML='phase:'+0
+                document.getElementById('bgm').play()
+                document.getElementById('bgm').volume=document.getElementById('volume').value/100;
+                invincible_time = document.getElementById('invincible_time').value*1000
+                document.getElementById('menu').style.display='none';
+                document.getElementById('result').style.display='none';
+                document.getElementById('game').style.display='inline';
+                document.getElementById('marker').style.display='inline'
+                document.getElementById('cursor').style.display='inline';
+                document.body.style.cursor='none'
+                score_x2 = x
+                score_y2 = y
+                start_game()
+            }
+        </script>
+        <script src="assets/js/options.js"></script>
+        <script src="assets/js/cursor.js"></script>
+        <script src="assets/js/judge.js"></script>
+        <script src="assets/js/generater.js"></script>
+    </head>
+    <body>
 
-
-body{
-  color: white;
-  position: relative;
-  background:black;
-  cursor:auto; /*もともとあるカーソルは非表示に*/
-  height:100vh;
-}
-  
-#cursor{
-  display: none;
-  position: fixed;
-  pointer-events: none;
-
-  /*丸の大きさと色の指定*/
-  background: #fff;
-  width: 50px;
-  height: 50px;
-  margin: -25px 0 0 -25px;/*真ん中にくるようにマイナスマージンで調整*/
-
-  z-index: 2;/*一番手前に来るように*/
-  pointer-events: none;/*クリックできなくなるのを防ぐため。noneで対応*/
-  opacity: 0;
-}
-#bgm{display: none;}
-
-
-
-/*最初の画面*/
-#title{
-  display: block;
-  margin-right: auto;
-  margin-left: auto;
-  width: 20%;
-}
-#option{
-  display: block;
-  width: 200px;
-  height: 200px;
-  margin-left: auto;
-  margin-right: auto;
-}
-.space{
-  height: 50px;
-}
-.options{
-  cursor: pointer;
-  display: block;
-  width: 190px;
-  height: 50px;
-  border: solid 5px white;
-  color: white;
-  text-decoration: none;
-  margin: 0;
-  text-align: center;
-  font-size: 48px;
-  font-family: "my-font";
-  transition: .3s;
-}
-.options:hover{
-  background-color: white;
-  color: black;
-}
-.space2{height: 10px;}
-#version{
-  color: white;
-  text-decoration: none;
-  position: fixed;
-  font-family: "my-font";
-  font-size: 20px;
-  bottom: 0;
-  right: 100px;
-}
-#setting_body{
-  display: none;
-  position: fixed;
-  top: 5%;
-  left: 5%;
-  width: 700px;
-  height: 700px;
-  border: solid 5px white;
-  background-color: black;
-  font-family: "my-font";
-  font-size: 30px;
-}
-.setting_contents{
-  margin-top: 5px;
-  margin-bottom: 5px;
-  margin-left: 5%;
-}
-.setting_jp{
-  font-size: 20px;
-}
-.fa-times-circle{
-  position: absolute;
-  top: 5%;
-  right: 5%;
-}
-#rule_body{
-  display: none;
-  position: fixed;
-  top: 5%;
-  right: 5%;
-  width: 700px;
-  height: 700px;
-  border: solid 5px white;
-  background-color: black;
-  font-family: "my-font";
-  font-size: 30px;
-}
-#rule_body h1{
-  margin-left: 5%;
-}
-#rule_body h2{
-  margin-left: 5%;
-  font-size: 25px;
-}
-#rule_body p{
-  margin-left: 5%;
-  font-size: 20px;
-}
-
-
-
-/*ゲーム画面*/
-#game{display: none;}
-
-.box{
-  position: fixed;
-  background-clip: content-box;
-  background-color: rgba(255, 255, 255, 0.1);
-  border: solid 25px transparent;
-  width: 50px;
-  height: 50px;
-}
-.box:after{
-  content: "";
-  border: solid 25px white;
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  width: calc(100% - 50px);
-  height: calc(100% - 50px);
-}
-#top{
-  border: solid 25px transparent;
-  background-clip: content-box;
-  background-color: white;
-  position: fixed;
-  top: -25px;
-  left: -25px;
-  height: 5px;
-  width: 100%;
-}
-#down{
-  border: solid 25px transparent;
-  background-clip: content-box;
-  background-color: white;
-  position: fixed;
-  bottom: -25px;
-  left: -25px;
-  height: 5px;
-  width: 100%;
-}
-#left{
-  border: solid 25px transparent;
-  background-clip: content-box;
-  background-color: white;
-  position: fixed;
-  top: -25px;
-  left: -25px;
-  height: 100%;
-  width: 5px;
-}
-#right{
-  border: solid 25px transparent;
-  position: fixed;
-  background-clip: content-box;
-  background-color: white;
-  top: -25px;
-  right: -25px;
-  height: 100%;
-  width: 5px;
-}
-#phase_text{
-  margin: 0;
-  position: absolute;
-  font-family: "my-font";
-  font-size: 30px;
-  top: 15px;
-  left: 20px;
-}
-
-/*リザルト*/
-#result{
-  display: none;
-  font-family: "my-font";
-}
-#option2{
-  display: block;
-  width: 200px;
-  height: 200px;
-  margin-left: auto;
-  margin-right: auto;
-}
-#result h1{
-  font-size: 100px;
-  text-align: center;
-}
-#result_phase{
-  text-align: center;
-  font-size: 40px;
-}
-#result_score{
-  text-align: center;
-  font-size: 40px;
-}
-#result table{
-  font-size: 30px;
-  margin-left: auto;
-  margin-right: auto;
-}
+        <audio src="assets/music/Horizon_Blue.mp3" controls loop id="bgm">Your browser does not support the
+            <code>audio</code> element.</audio>
+        <div id="cursor"></div>
+        <div id="menu">
+            <div class="space"></div>
+            <img src="assets/img/title.svg" id="title">
+            <div class="space"></div>
+            <div id="option">
+                <p id="start" class="options" onclick="starta()">START</p>
+                <div class="space2"></div>
+                <p id="setting" class="options" onclick="open_setting(true)">SETTING</p>
+                <div class="space2"></div>
+                <p id="rule" class="options" onclick="open_rule(true)">RULE</p>
+            </div>
+            <div id="setting_body">
+                <h1 class="setting_contents">SETTING</h1>
+                <p class="setting_contents">volume<br>
+                    <i class="fas fa-volume-up"></i>
+                    <input type="range" value="50" min="0" max="100" step="1"
+                    oninput="change_volume()" id="volume">
+                    <output id="output1">50</output><br><span class="setting_jp">音量の調整</span>
+                </p>
+                <p class="setting_contents">size_limit<br>
+                    <i class="fas fa-expand-arrows-alt"></i>
+                    <input type="range" value="40" min="20" max="80" step="1"
+                    oninput="document.getElementById('output2').value=this.value" id="size_limit">
+                    <output id="output2">40</output>%<br><span class="setting_jp">最大時の大きさの調整（画面横幅に対する割合）</span>
+                </p>
+                <p class="setting_contents">phase_speed<br>
+                    <i class="fas fa-hourglass-half"></i>
+                    <input type="range" name="samplerange" value="5" min="2" max="10" step="1"
+                    oninput="document.getElementById('output3').value=this.value" id="phase_speed">
+                    <output id="output3">5</output><span class="setting_jp">秒</span><br>phase<span class="setting_jp">時間の調整</span>
+                </p>
+                <p class="setting_contents">increase_speed<br>
+                    <i class="fas fa-hourglass-half"></i>
+                    <input type="range" name="samplerange" value="5" min="1" max="10" step="1"
+                    oninput="document.getElementById('output4').value=this.value" id="increase_speed">
+                    <output id="output4">5</output>phase<span class="setting_jp">ごと</span><br><span class="setting_jp">増加頻度の調整</span>
+                </p>
+                <p class="setting_contents">increase_limit<br>
+                    <i class="fas fa-ban"></i>
+                    <input type="range" name="samplerange" value="20" min="10" max="100" step="1"
+                    oninput="document.getElementById('output5').value=this.value" id="increase_limit">
+                    <output id="output5">20</output><span class="setting_jp">個まで</span><br><span class="setting_jp">増加上限の調整</span>
+                </p>
+                <p class="setting_contents">invincible_time<br>
+                    <i class="fas fa-hourglass-half"></i>
+                    <input type="range" name="samplerange" value="0.2" min="0" max="1" step="0.1"
+                    oninput="document.getElementById('output6').value=this.value" id="invincible_time">
+                    <output id="output6">0.2</output><span class="setting_jp">秒</span><br><span class="setting_jp">無敵時間の調整</span>
+                </p>
+                <i class="far fa-times-circle" onclick="open_setting(false)"></i>
+            </div>
+            <div id="rule_body">
+                <h1>RULE</h1>
+                <h2>概要</h2>
+                <p>画面上に出現する四角を避け<br>フェーズ(phase)を進める<br>壁に当たってもゲームオーバー</p>
+                <h2>操作方法</h2>
+                <p>マウスまたはトラックパットによるカーソル移動のみ</p>
+                <h2>四角</h2>
+                <p>フェーズ(phase)の進行に伴い、出現数が変化する<br>設定(SETTING)より変更可</p>
+                <h2>スコア</h2>
+                <p>カーソルの移動距離とフェーズの進行度合いで増加します</p>
+                <i class="far fa-times-circle" onclick="open_rule(false)"></i>
+            </div>
+            <a id="version" href="旧SS.html">Vr.4.0</a>
+        </div>
+        <div id="game">
+            <p id="phase_text"></p>
+            <div id="top" class="square"></div>
+            <div id="down" class="square"></div>
+            <div id="left" class="square"></div>
+            <div id="right" class="square"></div>
+            <div id="marker"></div>
+        </div>
+        <div id="result">
+            <h1>RESULT</h1>
+            <p id="result_phase"></p>
+            <p id="result_score"></p>
+            <div id="result_setting">
+                <table>
+                    <tr><td>size_limit</td><td id="td1"></td></tr>
+                    <tr><td>phase_speed</td><td id="td2"></td></tr>
+                    <tr><td>increase_speed</td><td id="td3"></td></tr>
+                    <tr><td>increase_limit</td><td id="td4"></td></tr>
+                </table>
+            </div>
+            <div id="option2">
+                <p id="replay" class="options" onclick="starta()">REPLAY</p>
+                <div class="space2"></div>
+                <p id="home" class="options" onclick="home()">HOME</p>
+                <div class="space2"></div>
+                <a id="report" class="options" href="https://docs.google.com/forms/d/e/1FAIpQLSfAfBBbCtkM6_Hb2KKxEXBMHDU8KGT7i6_zvG4cgWCzG12iog/viewform?usp=sf_link" target="_blank">REPORT</a>
+            </div>
+        </div>
+    </body>
+</html>
