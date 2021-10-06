@@ -33,6 +33,7 @@ function result_s(){
     document.getElementById('td2').innerHTML='　'+document.getElementById('phase_speed').value+' second'
     document.getElementById('td3').innerHTML='　'+document.getElementById('increase_speed').value+' phase'
     document.getElementById('td4').innerHTML='　'+document.getElementById('increase_limit').value+' pieces'
+    document.getElementById('td5').innerHTML='　'+document.getElementById('invincible_time').value+'second'
 }
 
 function home(){
