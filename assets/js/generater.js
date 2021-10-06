@@ -29,6 +29,11 @@ function start_game(){
             document.getElementById(tmpname).style.left = rand_left;
             tmp.push(tmpname)
         }
+        setTimeout(function(){
+            for(l=0;l<tmp.length;l++){
+                document.getElementById(tmp[l]).style.pointerEvents ='all';
+            }
+        },invincible_time)
         var t=0
         var id2 = setInterval(function(){
             t++
